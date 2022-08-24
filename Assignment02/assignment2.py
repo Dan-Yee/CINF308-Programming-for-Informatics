@@ -1,13 +1,17 @@
 # Single Filers Income Tax Calculator (based on 2022 Federal Income Tax brackets)
 # Source for tax brackets: https://www.nerdwallet.com/article/taxes/federal-income-tax-brackets
 
-continueProgram = True
+"""
+This program asks the user to enter their taxable income and tells them the total federal income tax they owe, as well as which tax bracket they are in, based on the 2022 Federal Income Tax brackets.
+The program also asks the user if they would like to compute the income tax owed on a different value of taxable income and allows them to keep doing so until they choose to quit.
+"""
+continueProgram = True                                                  # boolean flag to see if the program should be repeated
 while(continueProgram):
     taxableIncome = float(input("Please enter your taxable income: $"))
 
-    taxOwed = 0
-    taxBracket = 10
-    if(taxableIncome < 0):
+    taxOwed = 0                                                         # smallest amount of tax owed is 0                              
+    taxBracket = 10                                                     # lowest tax bracket is 10%
+    if(taxableIncome < 0):                                              # determine which tax bracket the taxable income entered falls under
         print("Error: Taxable income cannot be negative")
         continue
     elif(taxableIncome >= 0 and taxableIncome <= 10275):
@@ -31,9 +35,11 @@ while(continueProgram):
         taxOwed = 162718 + ((taxableIncome - 539900) * 0.37)
         taxBracket = 37
     
+    # display final results
     print("Your taxable income was $", format(taxableIncome, ",.2f"), sep = "")
     print("Based on the 2022 Federal Income Tax brackets, you are in the ", taxBracket, "% tax bracket and owe $", format(taxOwed, ",.2f"), " in federal income taxes.", sep = "")
 
+    # check if the user wants to compute tax owed on a different value of taxable income
     loopProgram = input("\nWould you like to compute the 2022 Federal Income Tax for another amount? (y/n): ")
     while(not(loopProgram.lower() == "y" or loopProgram.lower() == "n")):
         print("Response not recognized: Please enter \"y\" or \"n\".")
