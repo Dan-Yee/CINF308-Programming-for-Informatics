@@ -32,12 +32,15 @@ while(hasMoreData):
     print("Please enter ", name.title(), "'s home city: ", end = "", sep = "")
     city = input("")
 
+    # if the state was already entered previously, append the city to the set associated with the state
+    # otherwise, create a new set for the new state entered
     if(state.title() in stateCities.keys()):
         stateCities[state.title()].add(city.title())
     else:
         stateCities[state.title()] = set()
         stateCities[state.title()].add(city.title())
 
+    # check if the user wants to input more data
     userInput = input("\n\nWould you like to enter more user data? (yes/no): ")
     userInput = userInput.lower()
     while(not(userInput == "yes" or userInput == "no")):
