@@ -238,7 +238,7 @@ def startGame():
         # boss counter attacks
         sleep(3)
         print()
-        print("The monster counter attacks you!")
+        print("The monster attacks you!")
         bossDamage = boss["DAMAGE"]
         if(bossDamage <= player["ARMOR"]):
             player["ARMOR"] = player["ARMOR"] - bossDamage
@@ -248,6 +248,10 @@ def startGame():
             player["ARMOR"] = 0
             player["HEALTH"] = player["HEALTH"] - bossDamage
             print("Your armor is now broken...you take the brunt of the damage.")
+
+            if(player["HEALTH"] < 0):
+                player["HEALTH"] = 0
+                break
         sleep(3)
         print()
         displayStats("PLAYER")
