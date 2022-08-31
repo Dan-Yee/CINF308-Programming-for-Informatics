@@ -1,3 +1,6 @@
+from random import randint
+from time import sleep
+
 # multipliers applied to boss damage, boss health, and player damage (default is 1x)
 bossDamageMultiplier = 1
 bossHealthMultiplier = 1
@@ -8,8 +11,11 @@ gameDifficulties = tuple(["EASY", "NORMAL", "HARD"])
 skillOptions = tuple(["DAMAGE", "ARMOR", "HEALTH"])
 
 # tuples to represent possible random options when giving out armor and weapons from chests
-armorOptions = tuple([25, 50, 75])
-weaponOptions = tuple([50, 75, 150, 200])
+potionOptions = tuple([25, 50, 75])
+armorOptions = weaponOptions = tuple([50, 75, 150, 200])
+
+# tuple to represent possible moves for boss fight
+playerOptions = tuple(["RUN", "HEAL", "ATTACK"])
 
 # dictionary to represent player information
 player = {"HEALTH" : 300,
@@ -26,12 +32,17 @@ boss = {"HEALTH" : 500,
 """
 Function to display the current stats of the player: health remaining, armor remaining, weapon damage, available healing potions
 """
-def displayPlayerStats():
-    print("Your current stats:")
-    print("Health:", player["HEALTH"])
-    print("Armor:", player["ARMOR"])
-    print("Weapon Damage:", player["DAMAGE"])
-    print("Available Healing", player["HEALING"])
+def displayStats(user):
+    if(user == "PLAYER"):
+        print("Your current stats:")
+        print("Health:", player["HEALTH"])
+        print("Armor:", player["ARMOR"])
+        print("Weapon Damage:", player["DAMAGE"])
+        print("Available Healing", player["HEALING"])
+    else:
+        print("Boss stats:")
+        print("Health:", boss["HEALTH"])
+        print("Weapon Damage:", boss["DAMAGE"])
 
 """
 Function that informs the player of the current multipliers being applied based on their selected difficulty
@@ -89,6 +100,35 @@ def selectSkill():
     print("You have applied a 1.5x multiplier to your player's", skill.title())
 
 """
+Function for looting a chest. If the player went left, the chest will contain a weapon. If the player went right, the chest will contain armor.
+Both chests contain healing potions. However, the weapon chest has less of them compared to the armor chest
+"""
+def lootChest(direction):
+    numOfPotions = 0
+    if(direction == "LEFT"):
+        # weapon chest
+        numOfPotions = randint(1, 5)
+        randomWeapon = weaponOptions[randint(0, len(weaponOptions) - 1)]
+        sleep(2)
+        print("You find a new weapon that does", randomWeapon, "damage.")
+        player["DAMAGE"] = randomWeapon
+    elif(direction == "RIGHT"):
+        # armor chest
+        numOfPotions = randint(5, 8)
+        randomArmor = armorOptions[randint(0, len(armorOptions) - 1)]
+        sleep(2)
+        print("You find a new piece of armor that has", randomArmor, "hit points.")
+        player["ARMOR"] = randomArmor
+    
+    sleep(3)
+    print("At the bottom of the chest, you find", numOfPotions, "random healing potions.")
+    print("(They are added to your healing inventory)")
+
+    for i in range(numOfPotions):
+        randomPotion = potionOptions[randint(0, len(potionOptions) - 1)]
+        player["HEALING"].append(randomPotion)
+
+"""
 Main driver function for the entire game
 """
 def startGame():
@@ -99,6 +139,143 @@ def startGame():
     print()
     selectSkill()
     print()
-    displayPlayerStats()
+    displayStats("PLAYER")
+    print()
 
+    # main portion of game
+    sleep(2)
+    print("You've just departed from home...seeking adventure.")
+    sleep(3)
+    print("You come across a fork in the road. You can choose to go left or right...")
+    sleep(3)
+    print("Down the left path, you might get a better weapon for the struggles ahead...")
+    sleep(3)
+    print("Down the right path, you might get better armor to defend yourself...")
+    sleep(3)
+
+    # user to decide which path to take
+    print()
+    direction = input("Which path do you choose? Left or Right: ")
+    direction = direction.upper()
+    while(not(direction == "LEFT" or direction == "RIGHT")):
+        print("Direction not recognized. Please enter \"left\" or \"right\".")
+        direction = input("Which path do you choose? Left or Right: ")
+        direction = direction.upper()
+    
+    sleep(2)
+    print("And down the", direction.lower(), "path you go.")
+    sleep(3)
+
+    # loot chest section of game
+    print()
+    print("On your way, you find an old rusty chest. You open it...")
+    lootChest(direction)
+    sleep(3)
+    print()
+    print("You are unable to carry everything you now have and choose to settle for the new loot...")
+
+    sleep(3)
+    print()
+    displayStats("PLAYER")
+
+    if(randint(0, 1) == 0):
+        print("Ow! You stepped on a random thorn on the road and lost 50 health points")
+        player["HEALTH"] = player["HEALTH"] - 50
+    
+    sleep(2)
+    print()
+    print("As you continue on, you run into a monster.")
+    sleep(3)
+    displayStats("BOSS")
+
+    sleep(3)
+    while(player["HEALTH"] > 0 or boss["HEALTH"] > 0):
+        print()
+        print("You are face to face with the monster now...")
+        sleep(3)
+        print()
+        print("You have three options: Run, Heal, or Attack")
+        playerMove = input("What is your move?: ")
+        playerMove = playerMove.upper()
+        while(playerMove not in playerOptions):
+            print("Move not recognized. Please try again.")
+            playerMove = input("What is your move?: ")
+            playerMove = playerMove.upper()
+        
+        sleep(2)
+        print()
+        if(playerMove == "RUN"):
+            print("You run back the way you came, as fast as you could...")
+            sleep(2)
+            print("You run into another monster. But this time, you are 100% outmatched.")
+            sleep(2)
+            print("In one fell swoop, you are cut clean in half by the monster. You die.")
+            player["HEALTH"] = 0
+            break
+        elif(playerMove == "ATTACK"):
+            print("You choose to fight. You swing at the monster and do", player["DAMAGE"], "hit points to the monster.")
+            boss["HEALTH"] = boss["HEALTH"] - player["DAMAGE"]
+            sleep(2)
+            print()
+            displayStats("BOSS")
+        elif(playerMove == "HEAL"):
+            print("You choose to heal. You look through your collection of healing potions.")
+            print(player["HEALING"])
+            sleep(2)
+            print()
+            healAmount = int(input("Which amount would you like to heal?: "))
+            while(healAmount not in player["HEALING"]):
+                print("You do not have that potion. Please choose a different one.")
+                healAmount = int(input("Which amount would you like to heal?: "))
+            player["HEALTH"] = player["HEALTH"] + healAmount
+            player["HEALING"].remove(healAmount)
+
+            sleep(2)
+            print("You have healed yourself by", healAmount, "hit points.")
+            print()
+            displayStats("PLAYER")
+        
+        # boss counter attacks
+        sleep(3)
+        print()
+        print("The monster counter attacks you!")
+        bossDamage = boss["DAMAGE"]
+        if(bossDamage <= player["ARMOR"]):
+            player["ARMOR"] = player["ARMOR"] - bossDamage
+            print("Your armor has taken the hit...this time.")
+        elif(bossDamage > player["ARMOR"]):
+            bossDamage -= player["ARMOR"]
+            player["ARMOR"] = 0
+            player["HEALTH"] = player["HEALTH"] - bossDamage
+            print("Your armor is now broken...you take the brunt of the damage.")
+        sleep(3)
+        print()
+        displayStats("PLAYER")
+
+        # boss self-heals by 25
+        sleep(3)
+        print()
+        print("The monster heals themself by 25 hit points...")
+        boss["HEALTH"] = boss["HEALTH"] + 25
+        sleep(2)
+        print()
+        displayStats("BOSS")
+
+    # end of game notice
+    print()
+    if(player["HEALTH"] <= 0):
+        print("You were defeated by the monster...")
+        sleep(2)
+        print("You forgot to tell anyone where you were going...")
+        sleep(2)
+        print("Your life was not remembered :(")
+    elif(boss["HEALTH"] <= 0):
+        print("You defeated the monster!")
+        sleep(2)
+        print("The King of the Empire of Py has recognized you for your skills...")
+        sleep(2)
+        print("You have been named Commander in Chief of all armed forces.")
+
+    sleep(2)
+    print("Thank you for playing. I worked hard on this game...")
 startGame()
