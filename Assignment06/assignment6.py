@@ -162,7 +162,6 @@ def startGame():
         direction = input("Which path do you choose? Left or Right: ")
         direction = direction.upper()
     
-    sleep(2)
     print("And down the", direction.lower(), "path you go.")
     sleep(3)
 
@@ -179,6 +178,7 @@ def startGame():
     displayStats("PLAYER")
 
     if(randint(0, 1) == 0):
+        print()
         print("Ow! You stepped on a random thorn on the road and lost 50 health points")
         player["HEALTH"] = player["HEALTH"] - 50
     
@@ -218,10 +218,16 @@ def startGame():
             sleep(2)
             print()
             displayStats("BOSS")
+            if(boss["HEALTH"] <= 0):
+                boss["HEALTH"] = 0
+                break
         elif(playerMove == "HEAL"):
             print("You choose to heal. You look through your collection of healing potions.")
             print(player["HEALING"])
             sleep(2)
+            if(len(player["HEALING"]) == 0):
+                print("You don't have any healing potions left")
+                continue
             print()
             healAmount = int(input("Which amount would you like to heal?: "))
             while(healAmount not in player["HEALING"]):
@@ -234,11 +240,12 @@ def startGame():
             print("You have healed yourself by", healAmount, "hit points.")
             print()
             displayStats("PLAYER")
+            continue
         
         # boss counter attacks
         sleep(3)
         print()
-        print("The monster attacks you!")
+        print("The monster counter attacks you!")
         bossDamage = boss["DAMAGE"]
         if(bossDamage <= player["ARMOR"]):
             player["ARMOR"] = player["ARMOR"] - bossDamage
@@ -249,23 +256,26 @@ def startGame():
             player["HEALTH"] = player["HEALTH"] - bossDamage
             print("Your armor is now broken...you take the brunt of the damage.")
 
-            if(player["HEALTH"] < 0):
+            if(player["HEALTH"] <= 0):
                 player["HEALTH"] = 0
                 break
         sleep(3)
         print()
         displayStats("PLAYER")
 
-        # boss self-heals by 25
+        # boss self-heals by 25 50% of the time
         sleep(3)
         print()
-        print("The monster heals themself by 25 hit points...")
-        boss["HEALTH"] = boss["HEALTH"] + 25
+        if(randint(0, 1) == 0):
+            print("The monster heals themself by 25 hit points...")
+            boss["HEALTH"] = boss["HEALTH"] + 25
+        else:
+            print("The monster doesn't heal this time.")
         sleep(2)
-        print()
         displayStats("BOSS")
 
     # end of game notice
+    sleep(2)
     print()
     if(player["HEALTH"] <= 0):
         print("You were defeated by the monster...")
@@ -281,5 +291,6 @@ def startGame():
         print("You have been named Commander in Chief of all armed forces.")
 
     sleep(2)
+    print()
     print("Thank you for playing. I worked hard on this game...")
 startGame()
