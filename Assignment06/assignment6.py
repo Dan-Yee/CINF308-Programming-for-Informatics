@@ -1,21 +1,24 @@
-from select import select
-
-
+# multipliers applied to boss damage, boss health, and player damage (default is 1x)
 bossDamageMultiplier = 1
-playerDamageMultiplier = 1
 bossHealthMultiplier = 1
+playerDamageMultiplier = 1
 
+# tuples to represent different game options: difficulty and skill selection
 gameDifficulties = tuple(["EASY", "NORMAL", "HARD"])
-armorOptions = tuple([25, 50, 75])
-weaponOptions = tuple([50, 75, 150, 200])
 skillOptions = tuple(["DAMAGE", "ARMOR", "HEALTH"])
 
+# tuples to represent possible random options when giving out armor and weapons from chests
+armorOptions = tuple([25, 50, 75])
+weaponOptions = tuple([50, 75, 150, 200])
+
+# dictionary to represent player information
 player = {"HEALTH" : 300,
             "ARMOR" : 100,
             "DAMAGE" : 100,
             "HEALING" : list()
             }
 
+# dictionary to represent boss information
 boss = {"HEALTH" : 500,
         "DAMAGE" : 100
         }
