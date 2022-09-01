@@ -145,13 +145,13 @@ def startGame():
     # main portion of game
     sleep(2)
     print("You've just departed from home...seeking adventure.")
-    sleep(3)
+    sleep(2)
     print("You come across a fork in the road. You can choose to go left or right...")
-    sleep(3)
+    sleep(2)
     print("Down the left path, you might get a better weapon for the struggles ahead...")
-    sleep(3)
+    sleep(2)
     print("Down the right path, you might get better armor to defend yourself...")
-    sleep(3)
+    sleep(2)
 
     # user to decide which path to take
     print()
@@ -163,21 +163,21 @@ def startGame():
         direction = direction.upper()
     
     print("And down the", direction.lower(), "path you go.")
-    sleep(3)
+    sleep(2)
 
     # loot chest section of game
     print()
     print("On your way, you find an old rusty chest. You open it...")
     lootChest(direction)
-    sleep(3)
+    sleep(2)
     print()
     print("You are unable to carry everything you now have and choose to settle for the new loot...")
 
-    sleep(3)
+    sleep(2)
     print()
     displayStats("PLAYER")
 
-    if(randint(0, 1) == 0):
+    if(randint(0, 1) == 0):                                                             # 50/50 chance of the player to step on a thorn mid-game and lose hit points
         print()
         print("Ow! You stepped on a random thorn on the road and lost 50 health points")
         player["HEALTH"] = player["HEALTH"] - 50
@@ -185,14 +185,14 @@ def startGame():
     sleep(2)
     print()
     print("As you continue on, you run into a monster.")
-    sleep(3)
+    sleep(2)
     displayStats("BOSS")
 
-    sleep(3)
+    sleep(2)
     while(player["HEALTH"] > 0 or boss["HEALTH"] > 0):
         print()
         print("You are face to face with the monster now...")
-        sleep(3)
+        sleep(2)
         print()
         print("You have three options: Run, Heal, or Attack")
         playerMove = input("What is your move?: ")
@@ -204,7 +204,7 @@ def startGame():
         
         sleep(2)
         print()
-        if(playerMove == "RUN"):
+        if(playerMove == "RUN"):                                                            # player chooses to run from the fight
             print("You run back the way you came, as fast as you could...")
             sleep(2)
             print("You run into another monster. But this time, you are 100% outmatched.")
@@ -212,20 +212,20 @@ def startGame():
             print("In one fell swoop, you are cut clean in half by the monster. You die.")
             player["HEALTH"] = 0
             break
-        elif(playerMove == "ATTACK"):
+        elif(playerMove == "ATTACK"):                                                       # player chooses to attack the monster
             print("You choose to fight. You swing at the monster and do", player["DAMAGE"], "hit points to the monster.")
             boss["HEALTH"] = boss["HEALTH"] - player["DAMAGE"]
             sleep(2)
             print()
             displayStats("BOSS")
-            if(boss["HEALTH"] <= 0):
+            if(boss["HEALTH"] <= 0):                                                        # if boss was defeated after player's attack, jump to end game section
                 boss["HEALTH"] = 0
                 break
-        elif(playerMove == "HEAL"):
+        elif(playerMove == "HEAL"):                                                         # player chooses to heal themselves; monster doesn't counter attack
             print("You choose to heal. You look through your collection of healing potions.")
             print(player["HEALING"])
             sleep(2)
-            if(len(player["HEALING"]) == 0):
+            if(len(player["HEALING"]) == 0):                                                # fail safe to make sure player isn't stuck in a loop when there are no potions left
                 print("You don't have any healing potions left")
                 continue
             print()
@@ -243,30 +243,30 @@ def startGame():
             continue
         
         # boss counter attacks
-        sleep(3)
+        sleep(2)
         print()
         print("The monster counter attacks you!")
         bossDamage = boss["DAMAGE"]
-        if(bossDamage <= player["ARMOR"]):
+        if(bossDamage <= player["ARMOR"]):                                                  # player has more armor than boss damage
             player["ARMOR"] = player["ARMOR"] - bossDamage
             print("Your armor has taken the hit...this time.")
-        elif(bossDamage > player["ARMOR"]):
+        elif(bossDamage > player["ARMOR"]):                                                 # player has less or no armor compared to boss damage
             bossDamage -= player["ARMOR"]
             player["ARMOR"] = 0
             player["HEALTH"] = player["HEALTH"] - bossDamage
             print("Your armor is now broken...you take the brunt of the damage.")
 
-            if(player["HEALTH"] <= 0):
+            if(player["HEALTH"] <= 0):                                                      # game over, player was killed
                 player["HEALTH"] = 0
                 break
-        sleep(3)
+        sleep(2)
         print()
         displayStats("PLAYER")
 
         # boss self-heals by 25 50% of the time
-        sleep(3)
+        sleep(2)
         print()
-        if(randint(0, 1) == 0):
+        if(randint(0, 1) == 0):                                                             # 50/50 chance of the monster healing
             print("The monster heals themself by 25 hit points...")
             boss["HEALTH"] = boss["HEALTH"] + 25
         else:
@@ -277,13 +277,13 @@ def startGame():
     # end of game notice
     sleep(2)
     print()
-    if(player["HEALTH"] <= 0):
+    if(player["HEALTH"] <= 0):                                                              # if player was killed
         print("You were defeated by the monster...")
         sleep(2)
         print("You forgot to tell anyone where you were going...")
         sleep(2)
         print("Your life was not remembered :(")
-    elif(boss["HEALTH"] <= 0):
+    elif(boss["HEALTH"] <= 0):                                                              # if monster was defeated
         print("You defeated the monster!")
         sleep(2)
         print("The King of the Empire of Py has recognized you for your skills...")
