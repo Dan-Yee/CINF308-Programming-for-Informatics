@@ -177,7 +177,7 @@ def startGame():
     print()
     displayStats("PLAYER")
 
-    if(randint(0, 1) == 0):                                                             # 50/50 chance of the player to step on a thorn mid-game and lose hit points
+    if(randint(0, 1) == 0):                                                                 # 50/50 chance of the player to step on a thorn mid-game and lose hit points
         print()
         print("Ow! You stepped on a random thorn on the road and lost 50 health points")
         player["HEALTH"] = player["HEALTH"] - 50
