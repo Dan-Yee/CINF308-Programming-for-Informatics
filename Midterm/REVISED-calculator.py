@@ -1,11 +1,14 @@
 from time import sleep
 
-arithmeticOperations = tuple(["+", "-", "*", "/", "^2", "X^Y"])
-calculatorOperations = tuple(["HISTORY", "CLEAR HISTORY", "CLEAR", "QUIT"])
-history = list()
+arithmeticOperations = tuple(["+", "-", "*", "/", "^2", "X^Y"])                         # all arithmetic operations
+calculatorOperations = tuple(["HISTORY", "CLEAR HISTORY", "CLEAR", "QUIT"])             # all calculator operations
+history = list()                                                                        # list for calculator history
 lastResult = None
 operation = None
 
+"""
+Function that displays all the available calculator and arithmetic operations that this program can handle
+"""
 def displayOperations():
     print("\n----------< Calculator Operations >----------")
     print("\tArithmetic: ")
@@ -17,6 +20,10 @@ def displayOperations():
         print("\t", calculatorOp.title())
     print()
 
+"""
+Function that accepts input to be used as operands in arithmetic operations.
+Function also handles special cases of when the result of a recent operation can be used (only asks for single input rather than two)
+"""
 def getOperands():
     if operation == arithmeticOperations[4]:                                # special case for the squared operation
         if lastResult == None:
@@ -34,6 +41,9 @@ def getOperands():
         num2 = int(input("Enter the second operand: "))
         return lastResult, num2
 
+"""
+Function that prints the history of calculator operations -- only stores arithmetic operations
+"""
 def printHistory():
     print("-----< History: >-----")
     if len(history) is 0:
@@ -42,6 +52,9 @@ def printHistory():
         for entry in history:
             print("\t", entry)
 
+"""
+Program continues to accept input (requests for arithmetic or calculator operations) until the user decides to quit
+"""
 hasNextOperation = True
 while(hasNextOperation):
     displayOperations()
