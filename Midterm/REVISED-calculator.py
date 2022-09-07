@@ -1,16 +1,18 @@
-arithmeticOperations = tuple(["+", "-", "*", "/", "^2", "x^y"])
-calculatorOperations = tuple(["HISTORY", "CLEARHISTORY", "CLEAR", "QUIT"])
+from time import sleep
+
+arithmeticOperations = tuple(["+", "-", "*", "/", "^2", "X^Y"])
+calculatorOperations = tuple(["HISTORY", "CLEAR HISTORY", "CLEAR", "QUIT"])
 history = list()
 lastResult = None
 operation = None
 
 def displayOperations():
-    print("Calculator Operations:\n")
-    print("Arithmetic: ")
+    print("\n----------< Calculator Operations >----------")
+    print("\tArithmetic: ")
     for arithmeticOp in arithmeticOperations:
         print("\t", arithmeticOp)
     print()
-    print("Other: ")
+    print("----------< Other Operations >----------")
     for calculatorOp in calculatorOperations:
         print("\t", calculatorOp.title())
     print()
@@ -19,9 +21,9 @@ def getOperands():
     if operation == arithmeticOperations[4]:                                # special case for the squared operation
         if lastResult == None:
             num1 = int(input("Enter the first operand: "))
-            return tuple(list(num1))
+            return (num1,)
         else:
-            return tuple(list(lastResult))
+            return (lastResult),
     if operation == None or operation in calculatorOperations:
         return
     if lastResult == None:                                                  # if the most recent calculation was None, ask for two operands
@@ -33,14 +35,19 @@ def getOperands():
         return lastResult, num2
 
 def printHistory():
-    print("History:")
-    for entry in history:
-        print("\t", entry)
+    print("-----< History: >-----")
+    if len(history) is 0:
+        print("\tNo History")
+    else:
+        for entry in history:
+            print("\t", entry)
 
 hasNextOperation = True
 while(hasNextOperation):
     displayOperations()
     print()
+    if lastResult is not None:
+        print("Last Result:", lastResult)
     operation = input("Select an operation: ")
     operation = operation.upper()
     while operation not in arithmeticOperations and operation not in calculatorOperations:
@@ -63,13 +70,15 @@ while(hasNextOperation):
         lastResult = operands[0] ** operands[1]
     elif(operation == calculatorOperations[0]):                     # handles viewing history
         printHistory()
+        sleep(5)                                                    # delay program to allow user to read history
         continue
     elif(operation == calculatorOperations[1]):                     # handles clearing history
         history.clear()
-        print("History cleared!")
+        print("History Cleared!")
         continue
     elif(operation == calculatorOperations[2]):                     # handles clearing most recent result
         lastResult = None
+        print("Calculator Cleared!")
         continue
     elif(operation == calculatorOperations[3]):                     # handles quitting program
         hasNextOperation = False
@@ -77,13 +86,14 @@ while(hasNextOperation):
 
     # display the final result of the operation performed by the calculator
     if operation == arithmeticOperations[4]:                        # special handling of the square operator
-        historyResult = str(operands[0]) + "^ 2 =" + str(lastResult)
-        print(historyResult)
+        historyResult = str(operands[0]) + " ^ 2 = " + str(lastResult)
+        print("Result of", historyResult)
     elif operation == arithmeticOperations[5]:                      # special handling of the x^y operation
-        historyResult = str(operands[0]) + "^" + str(operands[1]) + " = " + str(lastResult)
-        print(historyResult)
+        historyResult = str(operands[0]) + " ^ " + str(operands[1]) + " = " + str(lastResult)
+        print("Result of", historyResult)
     else:                                                           # all other operations
         historyResult = str(operands[0]) + " " + operation + " " + str(operands[1]) + " = " + str(lastResult)
-        print(historyResult)
+        print("Result of", historyResult)
     # add the operation to history list
     history.append(historyResult)
+    sleep(3)                                                        # delay the program to give the user time to read results
