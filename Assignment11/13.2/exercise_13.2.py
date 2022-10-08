@@ -6,7 +6,6 @@ skip over the header information at the beginning of the file, and process the r
 - Modify your program to count the total number of words in the book and the number of times each word is used
 """
 from collections import defaultdict
-from email.policy import default
 import string
 
 def exercise_13_2():
