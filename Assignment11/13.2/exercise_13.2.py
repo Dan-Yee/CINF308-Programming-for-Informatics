@@ -32,6 +32,13 @@ def exercise_13_2():
         line = line.lower()                                                         # convert everything to lowercase
         line = line.translate(str.maketrans('', '', string.punctuation))            # strip all punctuation out
         
+        # replace the special looking characters that are a part of Windows
+        line = line.replace("—", " ")
+        line = line.replace("“", " ")
+        line = line.replace("”", " ")
+        line = line.replace("‘", " ")
+        line = line.replace("’", " ")
+        
         words = line.split()                                                        # break every line into words and remove all white space characters
         totalWords += len(words)
         for word in words:

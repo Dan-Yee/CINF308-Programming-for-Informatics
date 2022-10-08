@@ -12,6 +12,14 @@ def exercise_13_1():
     for line in file:
         line = line.lower()                                                         # convert everything to lowercase
         line = line.translate(str.maketrans('', '', string.punctuation))            # strip all punctuation out
+        
+        # replace the special looking characters that are a part of Windows
+        line = line.replace("—", " ")
+        line = line.replace("“", " ")
+        line = line.replace("”", " ")
+        line = line.replace("‘", " ")
+        line = line.replace("’", " ")
+        
         result.extend(line.split())                                                 # strips all white space characters
     
     print("Reading from \"exercise_13.1.txt\"")   
